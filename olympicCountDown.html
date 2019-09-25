@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>カウントダウン</title>
+  <style>
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+    }
+
+    .main {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .main h1 {
+      font-size: 4vmin;
+      font-weight: lighter;
+    }
+
+    .desc {
+      font-size: 2.4vmin;
+      font-weight: bold;
+      color: #3e62ad;
+    }
+
+    #timer {
+      font-size: 2.4vmin;
+      font-weight: bold;
+      color: #3e62ad;
+    }
+
+    #timer span {
+      font-size: 4vmin;
+      font-weight: bold;
+      color: #c85554;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="main">
+    <h1 class="title">🍷 Tokyo 2020 🍷</h1>
+    <p class="desc">Tokyo Olympic is on 24 July 2020 !!</p>
+    <p id="timer"></p>
+  </div>
+
+  <script>
+
+    // 開催日時
+    const targetDateTime = new Date("2020/07/24 20:00");
+
+    // 開催日時を入力すると現在時間からの残り時間を返す関数
+    const createRemainingDateTimeArray = (targetDateTime) => {
+      const nowDateTime = new Date();
+      const remainingMs = targetDateTime - nowDateTime;
+      const dd = Math.ceil(remainingMs / (24 * 60 * 60 * 1000) - 1);
+      const hour = ~~(remainingMs / 3600000);
+      const minute = ~~((remainingMs - 3600000 * hour) / 60000);
+      const hh = ('00' + hour % 24).slice(-2);
+      const mm = ('00' + minute).slice(-2);
+      const ms = ('00000' + (remainingMs % 60000)).slice(-5);
+      return [dd, hh, mm, ms.slice(0, 2), ms.slice(2, 5), remainingMs];
+    }
+
+    // 1ms毎に実行&表示する関数
+    const countDown = () => {
+      const remainingDatetimeArray = createRemainingDateTimeArray(targetDateTime);
+      if (remainingDatetimeArray[5] < 0) {
+        document.getElementById('timer').innerHTML = `<span>All done!!</span>`
+      } else {
+        document.getElementById('timer').innerHTML = `<span>${remainingDatetimeArray[0]}</span>days <span>${remainingDatetimeArray[1]}</span>hours <span>${remainingDatetimeArray[2]}</span>min <span>${remainingDatetimeArray[3]}</span>sec <span>${remainingDatetimeArray[4]}</span>`;
+        setTimeout(() => countDown(), 1);
+      }
+    }
+
+    // カウントダウン実行
+    countDown();
+
+  </script>
+</body>
+
+</html>
